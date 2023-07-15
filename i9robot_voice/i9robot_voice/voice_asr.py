@@ -9,7 +9,7 @@ from nltk.tokenize import word_tokenize
 class SpeechRecognitionNode(Node):
     def __init__(self):
         super().__init__('speech_recognition_node')
-        self.publisher_ = self.create_publisher(String, 'voice_cmd', 10)
+        self.publisher_ = self.create_publisher(String, 'voice_cmd', 50)
         self.timer_ = self.create_timer(2.0, self.callback)
         self.recognizer_ = sr.Recognizer()
         self.microphone_ = sr.Microphone()
@@ -25,7 +25,7 @@ class SpeechRecognitionNode(Node):
         text = text.lower().replace(self.wakeword2,"") # add below self.wakeword3_ if you add to wake word list in constructor above
         msg.data = text # load the ROS2 String msg with the user command excluding the wake word
         self.publisher_.publish(msg)
-        self.get_logger().info(msg.data)
+        self.get_logger().info(text)
 
     def callback(self):
         with self.microphone_ as source:
